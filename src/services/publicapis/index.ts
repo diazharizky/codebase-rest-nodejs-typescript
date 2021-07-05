@@ -1,7 +1,9 @@
 import client from './client'
 
 export default {
-  getCategories: () => client.get('/categories'),
+  getCategories: () => {
+    return client.get('/categories')
+  },
 
   getEntries: async (category?: string) => {
     const [res, err] = await client.get('/entries', {

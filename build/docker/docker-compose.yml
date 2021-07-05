@@ -1,0 +1,7 @@
+version: "3.4"
+services:
+  mongo:
+    image: mongo:4.0.5
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
