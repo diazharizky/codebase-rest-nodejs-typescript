@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "module": "CommonJS",
+    "target": "ES2020",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "ts-node": { "compilerOptions": { "module": "commonjs" } }
+}
