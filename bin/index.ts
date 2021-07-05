@@ -7,10 +7,11 @@ import log from '../src/utils/log'
 const clusterWorkerSize = os.cpus().length
 const listenPort: number = config.get('listen_port')
 const listenHost: string = config.get('listen_host')
+const backlogNumber: number = 511
 
 const start = () => {
   if (!cluster.isPrimary || clusterWorkerSize <= 1) {
-    app.listen(listenPort, listenHost, 50, () => {
+    app.listen(listenPort, listenHost, backlogNumber, () => {
       log.info({ msg: 'App started!', host: listenHost, port: listenPort })
     })
   } else {
