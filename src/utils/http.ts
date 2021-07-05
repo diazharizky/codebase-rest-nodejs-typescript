@@ -43,13 +43,13 @@ class Request {
     return [!res ? null : res.data, err]
   }
 
-  get(path: string, conf: axios.AxiosRequestConfig) {
+  get(path: string, conf?: axios.AxiosRequestConfig) {
     let finalConf: axios.AxiosRequestConfig = { method: 'GET', url: path }
     finalConf = !conf ? finalConf : { ...finalConf, ...conf }
     return this.request(finalConf)
   }
 
-  post(path: string, payload: JSON | string, conf: axios.AxiosRequestConfig) {
+  post(path: string, payload: JSON | string, conf?: axios.AxiosRequestConfig) {
     let finalConf: axios.AxiosRequestConfig = {
       method: 'POST',
       url: path,
@@ -73,7 +73,7 @@ class Request {
     return this.request(finalConf)
   }
 
-  put(path: string, payload: JSON | string, conf: axios.AxiosRequestConfig) {
+  put(path: string, payload: JSON | string, conf?: axios.AxiosRequestConfig) {
     let finalConf: axios.AxiosRequestConfig = {
       method: 'PUT',
       url: path,
@@ -97,7 +97,7 @@ class Request {
     return this.request(finalConf)
   }
 
-  del(path: string, conf: axios.AxiosRequestConfig) {
+  del(path: string, conf?: axios.AxiosRequestConfig) {
     let finalConf: axios.AxiosRequestConfig = { method: 'DELETE', url: path }
     finalConf = !conf ? finalConf : { ...finalConf, ...conf }
     return this.request(finalConf)

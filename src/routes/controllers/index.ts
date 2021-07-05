@@ -1,5 +1,3 @@
 import foo from './foo'
 
-export default {
-  foo,
-}
+export default { foo }

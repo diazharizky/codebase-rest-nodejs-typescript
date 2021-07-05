@@ -1,13 +1,9 @@
 import { Router } from 'express'
 import controllers from './controllers'
 
-const router = Router()
+const r = Router()
 
-router.get('/', (_, res) => {
-  res.status(200).send('Hello world!')
-})
+r.get('/categories', controllers.foo.getCategories)
+r.get('/entries', controllers.foo.getEntries)
 
-const foo = router.route('/foo')
-foo.get(controllers.foo.fn)
-
-export default router
+export default r
