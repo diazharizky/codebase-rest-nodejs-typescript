@@ -1,8 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import log from '../../utils/log'
+import { AdvancedError } from '../../errors'
 
 const middleware = () => {
-  const f = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  const f = (
+    err: AdvancedError,
+    _: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     if (res.headersSent) {
       return next(err)
     }
@@ -11,7 +17,7 @@ const middleware = () => {
       error: err,
       stacktrace: err.stack,
     })
-    res.status(500).send('Internal server error')
+    res.status(err.code || 500).send(err.message || 'Internal server error')
   }
   return f
 }

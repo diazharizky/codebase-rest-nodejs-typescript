@@ -4,10 +4,11 @@ import controllers from './controllers'
 const r = Router()
 
 r.get('/categories', controllers.foo.getCategories)
-r.get('/entries', controllers.foo.getEntries)
 
-const dbRoute = r.route('/db')
-dbRoute.get(controllers.foo.getFromDB)
-dbRoute.post(controllers.foo.insertIntoDB)
+const entryRoute = r.route('/entries')
+entryRoute.get(controllers.foo.getEntries)
+entryRoute.post(controllers.foo.insertIntoDB)
+
+r.get('/entries/saved', controllers.foo.getFromDB)
 
 export default r

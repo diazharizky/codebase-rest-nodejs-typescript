@@ -12,6 +12,9 @@ export default {
     if (err) {
       return [null, err]
     }
+    if (!res.entries) {
+      return [[]]
+    }
     return [res.entries]
   },
 }

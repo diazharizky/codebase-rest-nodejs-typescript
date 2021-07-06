@@ -3,24 +3,20 @@ import connect from './connection'
 const collection = 'foo'
 
 export const create = async (payload: {}) => {
-  try {
-    const con = await connect()
-    const col = con.collection(collection)
-    await col.insertOne(payload)
-  } catch (e) {
-    return e
+  const [con, err] = await connect()
+  if (err) {
+    throw err
   }
+  const col = con!.collection(collection)
+  await col.insertOne(payload)
 }
 
 export const get = async () => {
-  let res
-  let err
-  try {
-    const con = await connect()
-    const col = con.collection(collection)
-    res = await col.find().toArray()
-  } catch (e) {
-    err = e
+  const [con, err] = await connect()
+  if (err) {
+    throw err
   }
-  return [res, err]
+  const col = con!.collection(collection)
+  const res = await col.find().toArray()
+  return [res]
 }

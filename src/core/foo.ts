@@ -1,7 +1,7 @@
 import publicapis from '../services/publicapis'
 import mongo from '../db/mongo'
 
-const paginate = (array: [], page: number, size: number) => {
+const paginate = <T>(array: T[], page: number, size: number): T[] => {
   return array.slice((page - 1) * size, page * size)
 }
 
@@ -23,10 +23,7 @@ const f = {
   },
 
   insertIntoDB: async (payload: {}) => {
-    const err = await mongo.foo.create(payload)
-    if (err) {
-      throw err
-    }
+    await mongo.foo.create(payload)
   },
 
   getFromDB: async () => {
