@@ -1,7 +1,7 @@
 import publicapis from '../services/publicapis'
 import mongo from '../db/mongo'
 
-const paginate = <T>(array: T[], page: number, size: number): T[] => {
+export const paginate = <T>(array: T[], page: number, size: number): T[] => {
   return array.slice((page - 1) * size, page * size)
 }
 
