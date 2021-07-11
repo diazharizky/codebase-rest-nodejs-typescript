@@ -4,9 +4,9 @@
   "description": "Node.js RESTful codebase written in Typescript.",
   "main": "bin/index.ts",
   "scripts": {
-    "test": "npm test",
     "start": "ts-node bin/index.ts",
-    "dev": "nodemon bin/index.ts"
+    "dev": "nodemon bin/index.ts",
+    "test": "mocha -r ts-node/register --timeout 10000 src/test/**/*.ts"
   },
   "repository": {
     "type": "git",
