@@ -1,22 +1,19 @@
-import connect from './connection'
+import * as client from './client'
 
 const collection = 'foo'
 
-export const create = async (payload: {}) => {
-  const [con, err] = await connect()
+export const create = async <T>(payload: T) => {
+  const [con, err] = await client.connect()
   if (err) {
     throw err
   }
-  const col = con!.collection(collection)
-  await col.insertOne(payload)
+  await client.insertOne(con!.collection(collection), payload)
 }
 
 export const get = async () => {
-  const [con, err] = await connect()
+  const [con, err] = await client.connect()
   if (err) {
     throw err
   }
-  const col = con!.collection(collection)
-  const res = await col.find().toArray()
-  return [res]
+  return await client.get(con!.collection(collection))
 }
