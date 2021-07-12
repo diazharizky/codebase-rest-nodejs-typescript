@@ -27,14 +27,14 @@ export const get = async <T>(
   col: mongo.Collection,
   filter?: mongo.FilterQuery<T>
 ): Promise<[T[], Error]> => {
-  let res = []
+  let res
   let err
   try {
     res = await col.find(filter).toArray()
   } catch (e) {
     err = e
   }
-  return [res, err]
+  return [res || [], err]
 }
 
 export const getOne = async <T>(
