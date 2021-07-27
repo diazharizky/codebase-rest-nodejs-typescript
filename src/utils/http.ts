@@ -49,7 +49,11 @@ class Request {
     return this.request(finalConf)
   }
 
-  post(path: string, payload: JSON | string, conf?: axios.AxiosRequestConfig) {
+  post<T>(
+    path: string,
+    payload: JSON | string | T,
+    conf?: axios.AxiosRequestConfig
+  ) {
     let finalConf: axios.AxiosRequestConfig = {
       method: 'POST',
       url: path,
@@ -73,7 +77,11 @@ class Request {
     return this.request(finalConf)
   }
 
-  put(path: string, payload: JSON | string, conf?: axios.AxiosRequestConfig) {
+  put<T>(
+    path: string,
+    payload: JSON | string | T,
+    conf?: axios.AxiosRequestConfig
+  ) {
     let finalConf: axios.AxiosRequestConfig = {
       method: 'PUT',
       url: path,

@@ -10,7 +10,8 @@ const listenHost: string = config.get('listen_host')
 const backlogNumber: number = 511
 
 const start = () => {
-  if (!cluster.isPrimary || clusterWorkerSize <= 1) {
+  // since v16.0.0 `isMaster` was deprecated, use `isPrimary` instead
+  if (!cluster.isMaster || clusterWorkerSize <= 1) {
     app.listen(listenPort, listenHost, backlogNumber, () => {
       log.info({ msg: 'App started!', host: listenHost, port: listenPort })
     })
