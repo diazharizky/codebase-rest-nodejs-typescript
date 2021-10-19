@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node bin/index.ts",
     "dev": "nodemon bin/index.ts",
-    "test": "mocha -r ts-node/register --timeout 10000 src/test/**/*.ts"
+    "test": "mocha -r ts-node/register --timeout 10000 src/test/**/*.ts",
+    "build:clean": "tsc --build --clean && rimraf ./dist"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,8 @@
     "express-async-errors": "^3.1.1",
     "knex": "^0.95.7",
     "mongodb": "^3.6.9",
-    "pino": "^6.11.3"
+    "pino": "^6.11.3",
+    "prom-client": "^14.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.20",
@@ -48,6 +50,7 @@
     "eslint-plugin-mocha": "^9.0.0",
     "mocha": "^9.0.2",
     "nodemon": "^2.0.9",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
     "tslint": "^6.1.3",
     "typescript": "^4.3.5"

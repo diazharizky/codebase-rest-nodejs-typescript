@@ -1,10 +1,11 @@
 import pino from 'pino'
 import config from 'config'
 
+const nodeEnv = process.env.NODE_ENV
+
 export default pino({
   name: config.get('app_name'),
-  level: process.env.NODE_ENV === 'test' ? 'warn' : 'info',
-  timestamp: () => {
-    return `,"time":"${new Date().toISOString()}"`
-  },
+  level: nodeEnv === 'test' ? 'warn' : 'info',
+  enabled: nodeEnv !== 'test',
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
 })

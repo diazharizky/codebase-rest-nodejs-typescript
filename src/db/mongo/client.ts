@@ -1,13 +1,21 @@
 import config from 'config'
 import * as mongo from 'mongodb'
-import { InternalServerError, NotFound } from '../../errors'
+import { ErrorX, InternalServerError, NotFound } from '../../modules/error'
 
-export const connect = async (): Promise<[mongo.Db | null, Error]> => {
+const getMongoURI = (host: string, port: string, dbName: string) =>
+  `mongodb://${host}:${port}/${dbName}`
+
+export const connect = async (): Promise<[mongo.Db | null, ErrorX?]> => {
   let con = null
-  let err
+  let err: ErrorX | undefined
+  const dbURI = getMongoURI(
+    config.get('db.mongo.host'),
+    config.get('db.mongo.port'),
+    config.get('db.mongo.db_name')
+  )
   try {
     con = (
-      await mongo.MongoClient.connect(config.get('db.mongo'), {
+      await mongo.MongoClient.connect(dbURI, {
         bufferMaxEntries: 0,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -15,9 +23,11 @@ export const connect = async (): Promise<[mongo.Db | null, Error]> => {
       })
     ).db()
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
     if (e instanceof mongo.MongoServerSelectionError) {
       err = InternalServerError('Cannot initialize Mongo connection', e)
+    } else {
+      err.data = e
     }
   }
   return [con, err]
@@ -26,13 +36,14 @@ export const connect = async (): Promise<[mongo.Db | null, Error]> => {
 export const get = async <T>(
   col: mongo.Collection,
   filter?: mongo.FilterQuery<T>
-): Promise<[T[], Error]> => {
+): Promise<[T[], ErrorX?]> => {
   let res
-  let err
+  let err: ErrorX | undefined
   try {
     res = await col.find(filter).toArray()
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
+    err.data = e
   }
   return [res || [], err]
 }
@@ -40,13 +51,14 @@ export const get = async <T>(
 export const getOne = async <T>(
   col: mongo.Collection,
   filter: mongo.FilterQuery<T>
-): Promise<[T | null, Error]> => {
+): Promise<[T | null, ErrorX?]> => {
   let res
-  let err
+  let err: ErrorX | undefined
   try {
     res = await col.findOne(filter)
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
+    err.data = e
   }
   if (!res) {
     return [null, NotFound('Document not found')]
@@ -56,13 +68,14 @@ export const getOne = async <T>(
 
 export const insertOne = async <T>(
   col: mongo.Collection,
-  payload: T
-): Promise<[null, Error]> => {
-  let err
+  data: T
+): Promise<[null, ErrorX?]> => {
+  let err: ErrorX | undefined
   try {
-    await col.insertOne(payload)
+    await col.insertOne(data)
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
+    err.data = e
   }
   return [null, err]
 }
@@ -70,13 +83,14 @@ export const insertOne = async <T>(
 export const updateOne = async <T>(
   col: mongo.Collection,
   filter: mongo.FilterQuery<T>,
-  payload: T
-): Promise<[null, Error]> => {
-  let err
+  data: T
+): Promise<[null, ErrorX?]> => {
+  let err: ErrorX | undefined
   try {
-    await col.updateOne(filter, payload)
+    await col.updateOne(filter, data)
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
+    err.data = e
   }
   return [null, err]
 }
@@ -84,12 +98,13 @@ export const updateOne = async <T>(
 export const deleteOne = async <T>(
   col: mongo.Collection,
   filter: mongo.FilterQuery<T>
-): Promise<[null, Error]> => {
-  let err
+): Promise<[null, ErrorX?]> => {
+  let err: ErrorX | undefined
   try {
     await col.deleteOne(filter)
   } catch (e) {
-    err = e
+    err = new ErrorX('Mongo error')
+    err.data = e
   }
   return [null, err]
 }

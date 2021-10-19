@@ -1,8 +1,14 @@
 listen_host: 0.0.0.0
 listen_port: 3000
+
+metrics_port: 3001
+
 app_name: codebase-rest-nodejs-typescript
 
 publicapis_host: https://api.publicapis.org
 
 db:
-  mongo: mongodb://localhost:27017/mongoDatabase
+  mongo:
+    host: localhost
+    port: 27017
+    db_name: someDBName

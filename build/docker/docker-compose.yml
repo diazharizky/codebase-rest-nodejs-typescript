@@ -5,3 +5,13 @@ services:
     restart: unless-stopped
     ports:
       - "27017:27017"
+    healthcheck:
+      test:
+        - CMD
+        - mongo
+        - --eval
+        - "db.adminCommand('ping')"
+    volumes:
+      - "mongodb:/data/db"
+volumes:
+  mongodb:

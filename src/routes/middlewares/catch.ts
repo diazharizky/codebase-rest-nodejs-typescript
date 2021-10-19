@@ -1,19 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
+import { ErrorX } from '../../modules/error'
 import log from '../../utils/log'
-import { AdvancedError } from '../../errors'
 
 const middleware = () => {
-  const f = (
-    err: AdvancedError,
-    _: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  const f = (err: ErrorX, _: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
       return next(err)
     }
     log.error({
-      message: 'exception_occured',
+      message: err.message || 'exception_occured',
       error: err,
       stacktrace: err.stack,
     })
