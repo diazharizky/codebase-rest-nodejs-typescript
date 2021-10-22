@@ -1,9 +1,8 @@
 import publicapis from '../services/publicapis'
 import mongo from '../db/mongo'
 
-export const paginate = <T>(array: T[], page: number, size: number): T[] => {
-  return array.slice((page - 1) * size, page * size)
-}
+export const paginate = <T>(array: T[], page: number, size: number): T[] =>
+  array.slice((page - 1) * size, page * size)
 
 const f = {
   getCategories: async () => {
@@ -22,10 +21,6 @@ const f = {
     return paginate(entries, page, size)
   },
 
-  insertIntoDB: async (payload: {}) => {
-    await mongo.foo.create(payload)
-  },
-
   getFromDB: async () => {
     const [data, err] = await mongo.foo.get()
     if (err) {
@@ -33,6 +28,8 @@ const f = {
     }
     return data
   },
+
+  insertIntoDB: async (payload: {}) => await mongo.foo.create(payload),
 }
 
 export default f

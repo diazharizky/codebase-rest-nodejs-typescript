@@ -11,4 +11,13 @@ db:
   mongo:
     host: localhost
     port: 27017
-    db_name: someDBName
+    database: someDBName
+    pool:
+      max_size: 7
+  mariadb:
+    host: localhost
+    port: 3306
+    database: codebase
+    password: codebase
+    pool:
+      max_size: 7

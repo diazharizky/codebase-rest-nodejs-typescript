@@ -6,16 +6,19 @@ const getMongoURI = (host: string, port: string, dbName: string) =>
   `mongodb://${host}:${port}/${dbName}`
 
 export const connect = async (): Promise<[mongo.Db | null, ErrorX?]> => {
-  let con = null
+  let con: mongo.Db | null = null
   let err: ErrorX | undefined
   const dbURI = getMongoURI(
     config.get('db.mongo.host'),
     config.get('db.mongo.port'),
-    config.get('db.mongo.db_name')
+    config.get('db.mongo.database')
   )
+  const maxPoolSize = parseInt(config.get('db.mongo.pool.max_size'), 10) || 10
   try {
     con = (
       await mongo.MongoClient.connect(dbURI, {
+        maxPoolSize,
+        minPoolSize: 0,
         bufferMaxEntries: 0,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -23,7 +26,7 @@ export const connect = async (): Promise<[mongo.Db | null, ErrorX?]> => {
       })
     ).db()
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     if (e instanceof mongo.MongoServerSelectionError) {
       err = InternalServerError('Cannot initialize Mongo connection', e)
     } else {
@@ -42,7 +45,7 @@ export const get = async <T>(
   try {
     res = await col.find(filter).toArray()
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     err.data = e
   }
   return [res || [], err]
@@ -57,7 +60,7 @@ export const getOne = async <T>(
   try {
     res = await col.findOne(filter)
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     err.data = e
   }
   if (!res) {
@@ -74,7 +77,7 @@ export const insertOne = async <T>(
   try {
     await col.insertOne(data)
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     err.data = e
   }
   return [null, err]
@@ -89,7 +92,7 @@ export const updateOne = async <T>(
   try {
     await col.updateOne(filter, data)
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     err.data = e
   }
   return [null, err]
@@ -103,7 +106,7 @@ export const deleteOne = async <T>(
   try {
     await col.deleteOne(filter)
   } catch (e) {
-    err = new ErrorX('Mongo error')
+    err = InternalServerError('Mongo error')
     err.data = e
   }
   return [null, err]
